@@ -34,6 +34,12 @@ namespace AlternativeAssignment5_ContactRegistry.ContactFiles
             _address = address;
         }
 
+        public Contact(Contact contact) : this(contact.FirstName, contact.LastName, contact.Address.StreetAddress, contact.Address.City, contact.Address.ZipCode, contact.Address.Country)    
+        {
+
+        }
+
+
         public string Name
         {
             get

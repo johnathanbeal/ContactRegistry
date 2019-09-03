@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace AlternativeAssignment5_ContactRegistry.ContactFiles
 {
-    public static class ContactManager
+    public class ContactManager
     {
-        public static List<Contact> Registry { get; set; }
+        private List<Contact> Registry { get; set; }
 
-        static ContactManager()
+        public ContactManager()
         {
             Registry = new List<Contact>();
         }
 
-        public static void AddContactToRegistry(Contact contact)
+        public void AddContactToRegistry(Contact contact)
         {
             Registry.Add(contact);
         }
 
-        public static Contact GetContactFromRegistryByFirstNameAndLastName(string firstName, string lastName)
+        public Contact GetContactFromRegistryByFirstNameAndLastName(string firstName, string lastName)
         {
-            return Registry.Where(r => r.FirstName == firstName && r.LastName == lastName).FirstOrDefault();
+            return new Contact(Registry.Where(r => r.FirstName == firstName && r.LastName == lastName).FirstOrDefault());
         }
 
-        public static Contact GetContactFromRegistryByAddress(string street, string city, string zip, CountryNames country)
+        public Contact GetContactFromRegistryByAddress(string street, string city, string zip, CountryNames country)
         {
             var contact = Registry.Where(r => r.Address.StreetAddress == street && r.Address.City == city
             && r.Address.ZipCode == zip).ToList();
@@ -36,15 +36,19 @@ namespace AlternativeAssignment5_ContactRegistry.ContactFiles
                 && r.Address.ZipCode == zip && r.Address.Country == country).ToList();
             }
 
-            return contact.FirstOrDefault();
+            Contact simulacra = new Contact(contact.FirstOrDefault());
+
+            return simulacra;
         }
 
-        public static Contact GetContactFromRegistry(int? index)
+        public Contact GetContactFromRegistry(int? index)
         {
-            return Registry[(int)index];
+            Contact original = Registry[(int)index];
+            Contact simulacra = new Contact(original);
+            return simulacra;
         }
 
-        public static Contact UpdateContact(int index, Contact contact)
+        public Contact UpdateContact(int index, Contact contact)
         {
             Registry[index].FirstName = contact.FirstName ?? Registry[index].Name.Split(' ')[0]; 
             Registry[index].LastName = contact.LastName ?? Registry[index].Name.Split(' ')[1];
@@ -56,17 +60,17 @@ namespace AlternativeAssignment5_ContactRegistry.ContactFiles
             return Registry[index];
         }
 
-        public static void RemoveContactFromRegistry(Contact contact)
+        public void RemoveContactFromRegistry(Contact contact)
         {
             Registry.Remove(contact);
         }
 
-        public static void RemoveContactFromRegistry(int index)
+        public void RemoveContactFromRegistry(int index)
         {
             Registry.RemoveAt(index);
         }
 
-        public static int RegistryCount()
+        public int RegistryCount()
         {
             return Registry.Count;
         }

@@ -21,11 +21,12 @@ namespace AlternativeAssignment5_ContactRegistry
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        ContactManager contactManager;
         public MainWindow()
         {
             InitializeComponent();
             InitializeGUI();
+            contactManager = new ContactManager();
         }
 
         public void InitializeGUI()
@@ -60,10 +61,10 @@ namespace AlternativeAssignment5_ContactRegistry
             }
             finally
             {
-                ContactManager.AddContactToRegistry(addContact);
+                contactManager.AddContactToRegistry(addContact);
                 listOfContacts.Items.Add(addContact.ToString());
             }
-            registeredCountTextBox.Text = ContactManager.RegistryCount().ToString();
+            registeredCountTextBox.Text = contactManager.RegistryCount().ToString();
         }
 
         //I don't understand why this method is called by the change method
@@ -88,11 +89,11 @@ namespace AlternativeAssignment5_ContactRegistry
                 Contact contact = new Contact();
                 try
                 {
-                    contact = ContactManager.GetContactFromRegistry(index);
+                    contact = contactManager.GetContactFromRegistry(index);
                 }
                 catch
                 {
-                    contact = ContactManager.GetContactFromRegistryByFirstNameAndLastName(firstNameTextBox.Text.Trim(), lastNameTextBox.Text.Trim());
+                    contact = contactManager.GetContactFromRegistryByFirstNameAndLastName(firstNameTextBox.Text.Trim(), lastNameTextBox.Text.Trim());
                 }
                 finally
                 {
@@ -111,21 +112,21 @@ namespace AlternativeAssignment5_ContactRegistry
             var contactIndex = listOfContacts.SelectedIndex;
             Contact removeContact = new Contact();
             
-                    removeContact = ContactManager.GetContactFromRegistryByAddress
+                    removeContact = contactManager.GetContactFromRegistryByAddress
                     (streetTextBox.Text,
                     cityTextBox.Text,
                     zipTextBox.Text,
                     (CountryNames)countryComboBox.SelectedItem);
             
-            if (contactIndex >= 0 && contactIndex <= ContactManager.RegistryCount())
+            if (contactIndex >= 0 && contactIndex <= contactManager.RegistryCount())
             {
                 try
                 {
-                    ContactManager.RemoveContactFromRegistry(contactIndex);
+                    contactManager.RemoveContactFromRegistry(contactIndex);
                 }
                 catch
                 {
-                    ContactManager.RemoveContactFromRegistry(removeContact);
+                    contactManager.RemoveContactFromRegistry(removeContact);
                 }
                 finally
                 {
@@ -139,7 +140,7 @@ namespace AlternativeAssignment5_ContactRegistry
 
             }
 
-            registeredCountTextBox.Text = ContactManager.RegistryCount().ToString();
+            registeredCountTextBox.Text = contactManager.RegistryCount().ToString();
             addButton.IsEnabled = true;
             changeButton.IsEnabled = false;
             firstNameTextBox.Text = "";
@@ -167,12 +168,12 @@ namespace AlternativeAssignment5_ContactRegistry
                     updateContact.Address.ZipCode = zipTextBox.Text;
                     updateContact.Address.Country = (CountryNames)countryComboBox.SelectedItem;
 
-                    ContactManager.UpdateContact(index, updateContact);
+                    contactManager.UpdateContact(index, updateContact);
                     listOfContacts.Items.RemoveAt(index);
 
                     listOfContacts.Items.Insert(index, updateContact.ToString());
 
-                    registeredCountTextBox.Text = ContactManager.RegistryCount().ToString();
+                    registeredCountTextBox.Text = contactManager.RegistryCount().ToString();
                     addButton.IsEnabled = true;
                     changeButton.IsEnabled = false;
                     deleteButton.IsEnabled = false;
